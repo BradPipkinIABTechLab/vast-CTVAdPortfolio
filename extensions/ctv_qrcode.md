@@ -123,13 +123,9 @@ The platform is responsible for mapping the ad-view-relative position into the f
 
 ## Relationship to creative attributes
 
-When the transaction supports creative attributes, the sender should also declare that the creative contains an advertiser QR code.
+When the transaction supports creative attributes, the sender should also declare that the creative contains an advertiser QR code using the appropriate value from [AdCOM List: Creative Attributes](https://github.com/InteractiveAdvertisingBureau/AdCOM/blob/develop/AdCOM%20v1.0%20FINAL.md#list-creative-attributes).
 
-For CTV Ad Portfolio signaling, this is represented by creative attribute value `19`:
-
-| `attr` | Description |
-| ---: | --- |
-| 19 | Contains advertiser QR code |
+This document intentionally does not duplicate the AdCOM Creative Attributes table. If the AdCOM list is updated, implementations should follow the current AdCOM list without requiring an update to this extension document.
 
 The QR Code Creative Extension provides structured metadata about the QR code. The creative attribute declares that a QR code is present. These signals are complementary.
 
@@ -172,6 +168,15 @@ Example:
   </CreativeExtensions>
 </Creative>
 ```
+
+## Example value note
+
+The examples below may include concrete AdCOM values to make the examples executable and easy to review. These examples are illustrative snapshots only. Implementers should validate the meaning of these values against the current AdCOM reference lists rather than treating this extension document as the authoritative enumeration source:
+
+- `attr`: [AdCOM List: Creative Attributes](https://github.com/InteractiveAdvertisingBureau/AdCOM/blob/develop/AdCOM%20v1.0%20FINAL.md#list-creative-attributes)
+- `plcmt`: [AdCOM List: Plcmt Subtypes - Video](https://github.com/InteractiveAdvertisingBureau/AdCOM/blob/develop/AdCOM%20v1.0%20FINAL.md#list-plcmt-subtypes---video)
+- `pos`: [AdCOM List: Placement Positions](https://github.com/InteractiveAdvertisingBureau/AdCOM/blob/develop/AdCOM%20v1.0%20FINAL.md#list-placement-positions)
+- `playbackmethod`: [AdCOM List: Playback Methods](https://github.com/InteractiveAdvertisingBureau/AdCOM/blob/develop/AdCOM%20v1.0%20FINAL.md#list-playback-methods)
 
 ## Example: Linear ad with QR code metadata
 
