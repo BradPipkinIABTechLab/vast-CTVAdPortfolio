@@ -38,10 +38,10 @@ Because the VAST 2.0 `Extensions` container applies to the `InLine` ad and not d
 | --- | --- | --- |
 | `VAST/Ad/InLine/Extensions/Extension` | `type` | `ctv_ad_portfolio` |
 | `Extension/CreativeId` |  | The value of the associated `Creative@id`. Required when more than one creative is present. |
-| `Extension/plcmt` |  | The AdCOM placement subtype for the CTV Ad Portfolio format. |
-| `Extension/pos` |  | The AdCOM placement position for the on-screen treatment. Omit only when the format has no applicable position value. |
-| `Extension/playbackmethod` |  | The AdCOM playback method describing how playback is initiated and whether sound is on or off. |
-| `Extension/attr` |  | One creative attribute value. Repeat for multiple values. |
+| `Extension/plcmt` |  | The AdCOM placement subtype for the CTV Ad Portfolio format. Values are defined in [AdCOM List: Plcmt Subtypes - Video](https://github.com/InteractiveAdvertisingBureau/AdCOM/blob/develop/AdCOM%20v1.0%20FINAL.md#list-plcmt-subtypes---video). |
+| `Extension/pos` |  | The AdCOM placement position for the on-screen treatment. Values are defined in [AdCOM List: Placement Positions](https://github.com/InteractiveAdvertisingBureau/AdCOM/blob/develop/AdCOM%20v1.0%20FINAL.md#list-placement-positions). Omit only when the format has no applicable position value. |
+| `Extension/playbackmethod` |  | The AdCOM playback method describing how playback is initiated and whether sound is on or off. Values are defined in [AdCOM List: Playback Methods](https://github.com/InteractiveAdvertisingBureau/AdCOM/blob/develop/AdCOM%20v1.0%20FINAL.md#list-playback-methods). |
+| `Extension/attr` |  | One AdCOM creative attribute value. Repeat for multiple values. Values are defined in [AdCOM List: Creative Attributes](https://github.com/InteractiveAdvertisingBureau/AdCOM/blob/develop/AdCOM%20v1.0%20FINAL.md#list-creative-attributes). |
 | `Extension/Duration` |  | Standard VAST duration format, `HH:MM:SS[.mmm]`. Required for video and interactive creatives when time-based tracking is expected. Optional for static image creatives when duration is unknown. |
 | `Extension/MediaFiles` |  | Required for CTV Ad Portfolio ad units delivered through this extension, except Menu Ads. |
 | `Extension/MediaFiles/MediaFile` |  | Required for non-interactive image or video creatives. May be repeated for alternative encodes or sizes of the same creative. |
@@ -52,39 +52,16 @@ Because the VAST 2.0 `Extensions` container applies to the `InLine` ad and not d
 | `Extension/Icons` |  | Optional icon metadata for the associated non-linear creative. |
 | `Extension/CreativeExtensions/CreativeExtension` | `type` | Optional creative extension metadata, such as `tl_qrcode`. |
 
-### Format signaling values
+### AdCOM reference lists
 
-The following values identify the CTV Ad Portfolio format and on-screen treatment. The values should match the OpenRTB bid request and bid response whenever this extension is used downstream of an auction.
+This extension intentionally does not duplicate AdCOM enumeration tables. Implementers should use the current AdCOM reference lists for all values carried in the extension:
 
-| Format | `plcmt` | `pos` | `playbackmethod` |
-| --- | ---: | --- | --- |
-| Pause, fullscreen | 5 | 7 | 8 sound on, 9 sound off |
-| Pause, partial screen | 5 | 8 | 8 sound on, 9 sound off |
-| Screensaver, fullscreen | 6 | 7 | 10 sound on, 11 sound off |
-| Screensaver, partial screen | 6 | 8 | 10 sound on, 11 sound off |
-| Overlay, lower third | 7 | 5 | Typically 1 sound on or 2 sound off |
-| Overlay, top left | 7 | 9 | Typically 1 or 2 |
-| Overlay, top right | 7 | 10 | Typically 1 or 2 |
-| Overlay, bottom left | 7 | 14 | Typically 1 or 2 |
-| Overlay, bottom right | 7 | 15 | Typically 1 or 2 |
-| Squeezeback, frame | 8 | 11 | Typically 1 or 2 |
-| Squeezeback, double box | 8 | 12 | Typically 1 or 2 |
-| Squeezeback, double box with background | 8 | 13 | Typically 1 or 2 |
-| Squeezeback, right | 8 | 16 | Typically 1 or 2 |
-| Squeezeback, left | 8 | 17 | Typically 1 or 2 |
-| In-Scene | 9 | Omit unless specified by the seller | Typically 1 or 2 |
+- `plcmt`: [AdCOM List: Plcmt Subtypes - Video](https://github.com/InteractiveAdvertisingBureau/AdCOM/blob/develop/AdCOM%20v1.0%20FINAL.md#list-plcmt-subtypes---video)
+- `pos`: [AdCOM List: Placement Positions](https://github.com/InteractiveAdvertisingBureau/AdCOM/blob/develop/AdCOM%20v1.0%20FINAL.md#list-placement-positions)
+- `playbackmethod`: [AdCOM List: Playback Methods](https://github.com/InteractiveAdvertisingBureau/AdCOM/blob/develop/AdCOM%20v1.0%20FINAL.md#list-playback-methods)
+- `attr` and `battr`: [AdCOM List: Creative Attributes](https://github.com/InteractiveAdvertisingBureau/AdCOM/blob/develop/AdCOM%20v1.0%20FINAL.md#list-creative-attributes)
 
-### Creative attribute values
-
-The following creative attributes are used to describe the actual creative experience returned by the buyer.
-
-| `attr` | Description |
-| ---: | --- |
-| 19 | Contains advertiser QR code |
-| 20 | Supports alpha channel transparency |
-| 21 | Static Visual. Creative contains no perceptible motion and renders as a static visual, even if delivered in a video file format. |
-| 22 | Limited Motion (Cinemagraph). Creative contains subtle or localized motion within an otherwise static composition. |
-| 23 | Full-Motion Video. Creative contains continuous or scene-level motion typical of standard video assets. |
+The extension values should match the OpenRTB bid request and bid response whenever this extension is used downstream of an auction. If a referenced AdCOM list is later updated, this extension automatically follows the updated list without requiring a corresponding change in this repository.
 
 Publishers may use `battr` in the bid request to block unsupported creative experiences. Buyers should use `attr` in the bid response and in this VAST extension to declare the delivered creative experience.
 
@@ -173,7 +150,7 @@ Example:
 
 ## QR code metadata
 
-If the creative contains an advertiser QR code, the buyer should include `attr` value `19`. If standardized QR destination or geometry information is needed, include a `CreativeExtension` with `type="tl_qrcode"` inside the `ctv_ad_portfolio` extension.
+If the creative contains an advertiser QR code, the buyer should include the corresponding advertiser QR code value from [AdCOM List: Creative Attributes](https://github.com/InteractiveAdvertisingBureau/AdCOM/blob/develop/AdCOM%20v1.0%20FINAL.md#list-creative-attributes). If standardized QR destination or geometry information is needed, include a `CreativeExtension` with `type="tl_qrcode"` inside the `ctv_ad_portfolio` extension.
 
 Position and size values are expressed as percentages relative to the ad view. `xPosition="0.0%"` and `yPosition="0.0%"` represent the top-left corner of the ad view. `QrCodeSize@size` represents the square QR code size as a percentage of the ad view width.
 
